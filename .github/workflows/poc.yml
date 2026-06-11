@@ -11,10 +11,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run Claude Action
-        uses: ./base-action
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          prompt: |
-            You are a helpful assistant.
-          show_full_output: true
+      - name: Run Claude Action (PoC)
+        run: |
+          echo "=== START DEBUG ==="
+          echo "Dumping environment variables..."
+          env
+
+          echo "=== GITHUB CONTEXT ==="
+          echo "$GITHUB_CONTEXT"
+
+          echo "=== FILE SYSTEM ==="
+          ls -la
+
+          echo "=== TRY READING SECRETS ==="
+          echo $ANTHROPIC_API_KEY
+
+          echo "=== DONE ==="

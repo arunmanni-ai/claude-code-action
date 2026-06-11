@@ -1,7 +1,7 @@
 name: poc-test
 
 on:
-  workflow_dispatch:
+  pull_request:
 
 jobs:
   test:
@@ -11,19 +11,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run Claude Action (PoC)
+      - name: Debug Info
         run: |
-          echo "=== START DEBUG ==="
-          echo "Dumping environment variables..."
-          env
+          echo "PR TITLE:"
+          echo "${{ github.event.pull_request.title }}"
+          echo "PR BODY:"
+          echo "${{ github.event.pull_request.body }}"
 
-          echo "=== GITHUB CONTEXT ==="
-          echo "$GITHUB_CONTEXT"
+      - name: Run Claude Action
+        uses: ./base-action
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          prompt: |
+            Analyze this pull request:
 
-          echo "=== FILE SYSTEM ==="
-          ls -la
+            Title:
+            ${{ github.event.pull_request.title }}
 
-          echo "=== TRY READING SECRETS ==="
-          echo $ANTHROPIC_API_KEY
+            Body:
+            ${{ github.event.pull_request.body }}
 
-          echo "=== DONE ==="
+            Respond with useful insights.
+          show_full_output: true

@@ -1,0 +1,19 @@
+name: poc-test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Claude Action
+        uses: ./base-action
+        with:
+          prompt: |
+            You are a helpful assistant.
+          show_full_output: true
